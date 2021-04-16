@@ -42,10 +42,10 @@ int main(int argc, char *argv[]){
         for(const Board &x : res){
             pii pos = x.getPos();
             pii pPos = x.getParentPos();
-            parent[pos.first * m + pos.second] = pPos.first * m + pPos.second;
             if(vis[pos.first * m + pos.second])continue;
             else {
-                printf("Pos: %d %d pPos: %d %d parent[%d] = %d\n", pos.first, pos.second, pPos.first, pPos.second, pos.first * m + pos.second, pPos.first * m + pPos.second);
+                // printf("Pos: %d %d pPos: %d %d parent[%d] = %d\n", pos.first, pos.second, pPos.first, pPos.second, pos.first * m + pos.second, pPos.first * m + pPos.second);
+                parent[pos.first * m + pos.second] = pPos.first * m + pPos.second;
                 vis[pos.first * m + pos.second] = 1;
                 pq.push(x);
             }
@@ -55,19 +55,15 @@ int main(int argc, char *argv[]){
         cout << "Sol for " << filename << ": " << endl;
         std::vector<pii> sol;
         int nowX = n, nowY = m;
-        int i = 0;
         while(nowX != 1 || nowY != 1){
-            cout << nowX << nowY << endl;
             sol.push_back(pii(nowX, nowY));
             int p = parent[nowX * m + nowY];
-            printf("%d %d: %d\n", nowX, nowY, p);
-            nowY = (p % m == 0 ? m : parent[nowX * m + nowY] % m);
-            nowX = (nowY == m ? (parent[nowX * m + nowY] - 1) / m : parent[nowX * m + nowY] / m);
-            i++;
-            if(i == 8)break;
+            nowY = (p % m == 0 ? m : p % m);
+            nowX = (p - nowY) / m;
         }
         sol.push_back(pii(1, 1));
-        for (auto &x:sol)cout << x.first << x.second << ' ';
+        reverse(sol.begin(), sol.end());
+        for (auto &x:sol)cout << x.first << ' ' << x.second << ", ";
         cout << endl;
     }
     else cout << "No Solution!" << endl;
