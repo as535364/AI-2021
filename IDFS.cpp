@@ -10,10 +10,10 @@ using std::endl;
 using std::string;
 typedef std::pair<int, int> pii;
 
-std::tuple<bool, int> dfsLimit(Node init, const string &s, int n, int m,
+std::tuple<bool, bool, int> dfsLimit(Node init, const string &s, int n, int m,
                              int depthLimit, std::vector<bool> &vis, std::vector<int> &parent){
 	// init
-    bool ans = false;
+    bool ans = false, cutOff = false;
     int cost = -1;
 	std::fill(vis.begin(), vis.end(), 0), std::fill(parent.begin(), parent.end(), 0);
 	init.setDepth(depthLimit);
@@ -28,7 +28,10 @@ std::tuple<bool, int> dfsLimit(Node init, const string &s, int n, int m,
             break;
         }
         st.pop();
-		if (now.getDepth()<= 0) continue;
+		if (now.getDepth()<= 0){
+            cutOff = true;
+            continue;
+        }
 		std::vector<Node> res = now.next(s, true);
 		for (const Node &x : res){
 			pii pos = x.getPos();
@@ -42,18 +45,19 @@ std::tuple<bool, int> dfsLimit(Node init, const string &s, int n, int m,
 			}
 		}
     }
-	return std::make_tuple(ans, cost);
+	return std::make_tuple(ans, cutOff, cost);
 }
 
 std::tuple<bool, int> IDFS(int cutOffLimit, Node init, const string &s, int n, int m,
                         	 std::vector<bool> &vis, std::vector<int> &parent){
 	int nowLimit = 0, cost = -1;
-	bool ans = false;
+	bool ans = false, cutOff = false;
 	while(nowLimit <= cutOffLimit){
 		// cout << "Now Depth: " << nowLimit << endl;
-		std::tie(ans, cost) = dfsLimit(init, s, n, m, nowLimit, vis, parent);
+		std::tie(ans, cutOff, cost) = dfsLimit(init, s, n, m, nowLimit, vis, parent);
 		// cout << ans << ' ' << cost << endl;
 		if(ans)return std::make_tuple(ans, cost);
+        if(!ans && !cutOff)return std::make_tuple(false, -1); // without cutoff -> failure
 		++nowLimit;
 	}
 	return std::make_tuple(false, -1);
