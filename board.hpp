@@ -47,7 +47,7 @@ public:
         }
         std::cout << "------------------------------------\n";
     };
-    std::vector<Board> next(const std::string &b){
+    std::vector<Board> next(const std::string &b, bool sort=false){
         std::vector<Board> res;
         int dir[][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
         for(int i = 0; i < 4; ++i){
@@ -58,6 +58,7 @@ public:
                 res.push_back(tmp);
             }
         }
+        if(sort)std::sort(res.begin(), res.end());
         return res;
     };
 private:
