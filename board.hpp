@@ -56,7 +56,6 @@ public:
                 Board tmp(*this);
                 tmp.move(dirx, diry, b);
                 res.push_back(tmp);
-                // std::cout << tmp.getPos().first << ' ' << tmp.getPos().second << std::endl;
             }
         }
         return res;

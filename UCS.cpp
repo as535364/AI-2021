@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include <fstream>
+// #include <set>
 #include <algorithm>
 #include <queue>
 
@@ -23,11 +24,18 @@ int main(int argc, char *argv[]){
     while (std::getline (inFile, tmp)) {
         s += tmp;
     }
-
+    // use set
+    // std::set<pii> vis;
+    // use array
     std::vector<bool> vis((n + 1) * m + 5);
     std::vector<int> parent((n + 1) * m + 5);
     std::priority_queue<Board> pq;
-    Board a(n, m); vis[1 * m + 1] = 1;
+    
+    Board a(n, m);
+    // use set
+    // vis.insert(std::make_pair(1, 1));
+    // use array
+    vis[1 * m + 1] = 1;
     if(a.canMove(0, 0, s))pq.push(a);
     
     while(!pq.empty()){
@@ -43,10 +51,16 @@ int main(int argc, char *argv[]){
         for(const Board &x : res){
             pii pos = x.getPos();
             pii pPos = x.getParentPos();
+            // use set
+            // if(vis.count(std::make_pair(pos.first, pos.second)))continue;
+            // use array
             if(vis[pos.first * m + pos.second])continue;
             else {
                 // printf("Pos: %d %d pPos: %d %d parent[%d] = %d\n", pos.first, pos.second, pPos.first, pPos.second, pos.first * m + pos.second, pPos.first * m + pPos.second);
                 parent[pos.first * m + pos.second] = pPos.first * m + pPos.second;
+                // use set
+                // vis.insert(std::make_pair(pos.first, pos.second));
+                // use array
                 vis[pos.first * m + pos.second] = 1;
                 pq.push(x);
             }
