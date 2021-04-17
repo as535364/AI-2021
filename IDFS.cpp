@@ -53,12 +53,12 @@ std::tuple<bool, int> IDFS(int cutOffLimit, Node init, const string &s, int n, i
 	int nowLimit = 0, cost = -1;
 	bool ans = false, cutOff = false;
 	while(nowLimit <= cutOffLimit){
-		// cout << "Now Depth: " << nowLimit << endl;
+		// cerr << "Now Depth: " << nowLimit << "\r";
 		std::tie(ans, cutOff, cost) = dfsLimit(init, s, n, m, nowLimit, vis, parent);
-		// cout << ans << ' ' << cost << endl;
 		if(ans)return std::make_tuple(ans, cost);
         if(!ans && !cutOff)return std::make_tuple(false, -1); // without cutoff -> failure
-		++nowLimit;
+		// ++nowLimit;
+        nowLimit += 100;
 	}
 	return std::make_tuple(false, -1);
 }
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]){
 	bool ans;
 	int cost;
 	
-	std::tie(ans, cost) = IDFS(std::min(1000000000, n * m), a, s, n, m, vis, parent);
+	std::tie(ans, cost) = IDFS(std::min(1000000000, 100 * n * m), a, s, n, m, vis, parent);
 
     if (ans){
 		cout << "Cost: " << cost << endl;

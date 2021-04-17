@@ -39,7 +39,8 @@ public:
         g_ += 10 + diff * diff;
         px_ = x_, py_ = y_;
         x_ += diffX, y_ += diffY;
-        --depth_;
+        // --depth_;
+        depth_ -= 10 + diff * diff;
     };
     void plot(const std::string &b) const{
         std::cout << "Cost: " << this->getG() << std::endl;
@@ -69,10 +70,20 @@ public:
     void setDepth(int depth){
         depth_ = depth;
     };
+    void calH(){
+        if(avaerage){
+
+        }
+        else {
+
+        }
+        h_ = 0;
+    };
 private:
-    double g_ = 0, h_ = 0;
+    double g_ = 0, h_ = 0; // h for IDA*
+    double avaerage = 0;
     int n_, m_;
     int x_ = 1, y_ = 1; // person pos
     int px_ = -1, py_ = -1; // parent pos
-    int depth_;
+    int depth_; // for IDFS
 };

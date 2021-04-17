@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
         }
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
-        for (auto &x:sol)cout << x.first << ' ' << x.second << ", ";
+        for (const auto &x:sol)cout << x.first << ' ' << x.second << ", ";
         cout << endl;
     }
     else cout << "No Solution!" << endl;
