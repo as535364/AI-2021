@@ -19,9 +19,9 @@ public:
     double getG() const{
         return g_;
     };
-    double getH() const{
-        return h_;
-    };
+    double getF() const{
+        return g_ + h_;
+    }
     int getDepth() const{
         return depth_;
     };
@@ -70,18 +70,23 @@ public:
     void setDepth(int depth){
         depth_ = depth;
     };
-    void calH(){
-        if(avaerage){
-
+    void calH(const std::string &s){
+        if(avaerage_ == -1){
+            avaerage_ = 0;
+            for(int i = 1; i <= n_; ++i){
+                for(int j = 1; j <= m_; ++j){
+                    double now = this->get(i, j, s);
+                    now *= now;
+                    avaerage_ += now;
+                }
+            }
+            avaerage_ /= (n_ * m_);
         }
-        else {
-
-        }
-        h_ = 0;
+        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);
     };
 private:
     double g_ = 0, h_ = 0; // h for IDA*
-    double avaerage = 0;
+    double avaerage_ = -1;
     int n_, m_;
     int x_ = 1, y_ = 1; // person pos
     int px_ = -1, py_ = -1; // parent pos
