@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include <fstream>
+#include <algorithm>
 #include <queue>
 
 using std::string;
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]){
             nowX = (p - nowY) / m;
         }
         sol.push_back(pii(1, 1));
-        reverse(sol.begin(), sol.end());
+        std::reverse(sol.begin(), sol.end());
         for (auto &x:sol)cout << x.first << ' ' << x.second << ", ";
         cout << endl;
     }
