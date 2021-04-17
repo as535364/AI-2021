@@ -10,15 +10,14 @@ using std::endl;
 using std::string;
 typedef std::pair<int, int> pii;
 
-std::tuple<bool, int> dfsLimit(Node init, string &s, int n, int m,
+std::tuple<bool, int> dfsLimit(Node init, const string &s, int n, int m,
                              int depthLimit, std::vector<bool> &vis, std::vector<int> &parent){
 	// init
     bool ans = false;
     int cost = -1;
-	vis.clear(), parent.clear();
+	std::fill(vis.begin(), vis.end(), 0), std::fill(parent.begin(), parent.end(), 0);
+	init.setDepth(depthLimit);
     std::stack<Node> st;
-    init.setDepth(depthLimit);
-
     if (init.canMove(0, 0, s))st.push(init);
 
     while (!st.empty()){
@@ -30,20 +29,14 @@ std::tuple<bool, int> dfsLimit(Node init, string &s, int n, int m,
         }
         st.pop();
 		if (now.getDepth()<= 0) continue;
-		std::vector<Node> res = now.next(s);
+		std::vector<Node> res = now.next(s, true);
 		for (const Node &x : res){
 			pii pos = x.getPos();
 			pii pPos = x.getParentPos();
-			// use set
-			// if(vis.count(std::make_pair(pos.first, pos.second)))continue;
-			// use array
 			if (vis[pos.first * m + pos.second])continue;
 			else {
 				// printf("Pos: %d %d pPos: %d %d parent[%d] = %d\n", pos.first, pos.second, pPos.first, pPos.second, pos.first * m + pos.second, pPos.first * m + pPos.second);
 				parent[pos.first * m + pos.second] = pPos.first * m + pPos.second;
-				// use set
-				// vis.insert(std::make_pair(pos.first, pos.second));
-				// use array
 				vis[pos.first * m + pos.second] = 1;
 				st.push(x);
 			}
@@ -52,11 +45,19 @@ std::tuple<bool, int> dfsLimit(Node init, string &s, int n, int m,
 	return std::make_tuple(ans, cost);
 }
 
-std::tuple<bool, int> IDFS(Node init, int cutOff){
-	return std::make_tuple(0, 0);
+std::tuple<bool, int> IDFS(int cutOffLimit, Node init, const string &s, int n, int m,
+                        	 std::vector<bool> &vis, std::vector<int> &parent){
+	int nowLimit = 0, cost = -1;
+	bool ans = false;
+	while(nowLimit <= cutOffLimit){
+		// cout << "Now Depth: " << nowLimit << endl;
+		std::tie(ans, cost) = dfsLimit(init, s, n, m, nowLimit, vis, parent);
+		// cout << ans << ' ' << cost << endl;
+		if(ans)return std::make_tuple(ans, cost);
+		++nowLimit;
+	}
+	return std::make_tuple(false, -1);
 }
-
-
 
 
 int main(int argc, char *argv[]){
@@ -72,16 +73,16 @@ int main(int argc, char *argv[]){
     while (std::getline(inFile, tmp)){
         s += tmp;
     }
-    // use set
-    // std::set<pii> vis;
-    // use array
+    
+
     std::vector<bool> vis((n + 1) * m + 5);
     std::vector<int> parent((n + 1) * m + 5);
 
     Node a(n, m);
 	bool ans;
 	int cost;
-	std::tie(ans, cost) = dfsLimit(a, s, n, m, 1000000000, vis, parent);
+	
+	std::tie(ans, cost) = IDFS(std::min(1000000000, n * m), a, s, n, m, vis, parent);
 
     if (ans){
 		cout << "Cost: " << cost << endl;
@@ -97,8 +98,8 @@ int main(int argc, char *argv[]){
         }
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
-        // for (auto &x : sol)cout << x.first << ' ' << x.second << ", ";
-        // cout << endl;
+        for (auto &x : sol)cout << x.first << ' ' << x.second << ", ";
+        cout << endl;
     }
     else cout << "No Solution!" << endl;
 }

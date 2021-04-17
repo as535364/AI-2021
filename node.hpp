@@ -54,7 +54,7 @@ public:
     };
     std::vector<Node> next(const std::string &b, bool sort=false){
         std::vector<Node> res;
-        int dir[][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        int dir[][2] = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
         for(int i = 0; i < 4; ++i){
             int dirx = dir[i][0], diry = dir[i][1];
             if(this->canMove(dirx, diry, b)){
