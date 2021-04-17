@@ -1,5 +1,5 @@
 CC:=g++
-CFLAGS = -Wall -std=c++17 -g -O2
+CFLAGS = -Wall -Wextra -std=c++17 -O2
 
 all:
 	$(CC) $(CFLAGS) -o P1_UCS P1_UCS.cpp
@@ -8,4 +8,4 @@ all:
 
 .PHONY:clean
 clean:
-	rm -rf *.o *.out P1_UCS P1_IDS
+	rm -rf *.o *.out P1_UCS P2_IDS P3_IDASTAR
