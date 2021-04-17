@@ -1,4 +1,4 @@
-#include "board.hpp"
+#include "node.hpp"
 #include <fstream>
 // #include <set>
 #include <algorithm>
@@ -29,9 +29,9 @@ int main(int argc, char *argv[]){
     // use array
     std::vector<bool> vis((n + 1) * m + 5);
     std::vector<int> parent((n + 1) * m + 5);
-    std::priority_queue<Board> pq;
+    std::priority_queue<Node> pq;
     
-    Board a(n, m);
+    Node a(n, m);
     // use set
     // vis.insert(std::make_pair(1, 1));
     // use array
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
     if(a.canMove(0, 0, s))pq.push(a);
     
     while(!pq.empty()){
-        Board now = pq.top();
+        Node now = pq.top();
         if(now.getPos().first == n && now.getPos().second == m){
             cout << "Cost: " << now.getG() << endl;
             ans = true;
@@ -47,8 +47,8 @@ int main(int argc, char *argv[]){
         }
         pq.pop();
 
-        std::vector<Board> res = now.next(s);
-        for(const Board &x : res){
+        std::vector<Node> res = now.next(s);
+        for(const Node &x : res){
             pii pos = x.getPos();
             pii pPos = x.getParentPos();
             // use set

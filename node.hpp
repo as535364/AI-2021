@@ -2,12 +2,13 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 const int WALL = '*';
 
-class Board{
+class Node{
 public:
-    Board(int n, int m): n_(n), m_(m){};
+    Node(int n, int m): n_(n), m_(m){};
     int get(int x, int y, const std::string &b) const{
         char tmp = b[x * (m_ + 2) + y];
         return tmp == WALL ? -1 : tmp - '0';
@@ -21,13 +22,16 @@ public:
     double getH() const{
         return h_;
     };
+    int getDepth() const{
+        return depth_;
+    };
     std::pair<int, int> getParentPos() const{
         return std::pair<int, int>(this->px_, this->py_);
     };
     std::pair<int, int> getPos() const{
         return std::pair<int, int>(this->x_, this->y_);
     };
-    bool operator<(const Board &rhs) const{
+    bool operator<(const Node &rhs) const{
         return g_ + h_ > rhs.g_ + h_;
     };
     void move(int diffX, int diffY, const std::string &b){
@@ -35,6 +39,7 @@ public:
         g_ += 10 + diff * diff;
         px_ = x_, py_ = y_;
         x_ += diffX, y_ += diffY;
+        --depth_;
     };
     void plot(const std::string &b) const{
         std::cout << "Cost: " << this->getG() << std::endl;
@@ -47,13 +52,13 @@ public:
         }
         std::cout << "------------------------------------\n";
     };
-    std::vector<Board> next(const std::string &b, bool sort=false){
-        std::vector<Board> res;
+    std::vector<Node> next(const std::string &b, bool sort=false){
+        std::vector<Node> res;
         int dir[][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
         for(int i = 0; i < 4; ++i){
             int dirx = dir[i][0], diry = dir[i][1];
             if(this->canMove(dirx, diry, b)){
-                Board tmp(*this);
+                Node tmp(*this);
                 tmp.move(dirx, diry, b);
                 res.push_back(tmp);
             }
@@ -61,9 +66,13 @@ public:
         if(sort)std::sort(res.begin(), res.end());
         return res;
     };
+    void setDepth(int depth){
+        depth_ = depth;
+    };
 private:
     double g_ = 0, h_ = 0;
     int n_, m_;
-    int x_ = 1, y_ = 1;
-    int px_ = -1, py_ = -1;
+    int x_ = 1, y_ = 1; // person pos
+    int px_ = -1, py_ = -1; // parent pos
+    int depth_;
 };
