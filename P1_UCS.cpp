@@ -38,12 +38,14 @@ int main(int argc, char *argv[]){
     
     if(a.canMove(0, 0, s)){
         pq.push(a);
-        vis[a.getPos().first * m + a.getPos().second] = 1;
+        pii pos = a.getPos();
+        vis[pos.first * m + pos.second] = 1;
     }
     
     while(!pq.empty()){
         Node now = pq.top();
-        if(now.getPos().first == n && now.getPos().second == m){
+        pii pos = now.getPos();
+        if(pos.first == n && pos.second == m){
             cout << "Cost: " << now.getG() << endl;
             ans = true;
             break;

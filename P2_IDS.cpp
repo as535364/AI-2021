@@ -20,13 +20,15 @@ std::tuple<bool, bool, int> dfsLimit(Node init, const string &s, int n, int m,
     std::stack<Node> st;
     if (init.canMove(0, 0, s)){
         st.push(init);
-        vis[init.getPos().first * m + init.getPos().second] = 1;
+        pii pos = init.getPos();
+        vis[pos.first * m + pos.second] = 1;
     }
     
 
     while (!st.empty()){
         Node now = st.top();
-        if (now.getPos().first == n && now.getPos().second == m){
+        pii pos = now.getPos();
+        if (pos.first == n && pos.second == m){
             cost = now.getG();
             ans = true;
             break;

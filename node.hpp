@@ -82,7 +82,7 @@ public:
             }
             avaerage_ /= (n_ * m_);
         }
-        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);// + avaerage_);
+        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);
     };
 private:
     double g_ = 0, h_ = 0; // h for IDA*
