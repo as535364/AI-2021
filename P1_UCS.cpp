@@ -35,8 +35,11 @@ int main(int argc, char *argv[]){
     // use set
     // vis.insert(std::make_pair(1, 1));
     // use array
-    vis[1 * m + 1] = 1;
-    if(a.canMove(0, 0, s))pq.push(a);
+    
+    if(a.canMove(0, 0, s)){
+        pq.push(a);
+        vis[a.getPos().first * m + a.getPos().second] = 1;
+    }
     
     while(!pq.empty()){
         Node now = pq.top();
@@ -78,8 +81,7 @@ int main(int argc, char *argv[]){
         }
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
-        for (const auto &x:sol)cout << x.first << ' ' << x.second << ", ";
-        cout << endl;
+        for (const auto &x:sol)cout << x.first << ' ' << x.second << endl;
     }
     else cout << "No Solution!" << endl;
 }

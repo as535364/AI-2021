@@ -21,7 +21,10 @@ std::tuple<bool, bool, int, double> Astar(Node init, const string &s, int n, int
 	std::fill(vis.begin(), vis.end(), 0), std::fill(parent.begin(), parent.end(), 0);
     init.calH(s);
     std::priority_queue<Node> pq;
-    if (init.canMove(0, 0, s))pq.push(init);
+    if (init.canMove(0, 0, s)){
+        pq.push(init);
+        vis[init.getPos().first * m + init.getPos().second] = 1;
+    }
 
     while (!pq.empty()){
         Node now = pq.top();
@@ -62,6 +65,7 @@ std::tuple<bool, int> IDAstar(double cutOffLimit, Node init, const string &s, in
     init.calH(s);
     double nowflimit = init.getF();
 	while(nowflimit <= cutOffLimit){
+        // cerr << "nowLimit: " << nowflimit << '\r';
 		std::tie(ans, cutOff, cost, nowflimit) = Astar(init, s, n, m, nowflimit, vis, parent);
 		if(ans)return std::make_tuple(ans, cost);
         if(!ans && !cutOff)return std::make_tuple(false, -1); // without cutoff -> failure
@@ -99,7 +103,6 @@ int main(int argc, char *argv[]){
         std::vector<pii> sol;
         int nowX = n, nowY = m;
         while(nowX != 1 || nowY != 1){
-            // cout << nowX << nowY << endl;
             sol.push_back(pii(nowX, nowY));
             int p = parent[nowX * m + nowY];
             nowY = (p % m == 0 ? m : p % m);
@@ -107,8 +110,7 @@ int main(int argc, char *argv[]){
         }
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
-        for (const auto &x:sol)cout << x.first << ' ' << x.second << ", ";
-        cout << endl;
+        for (const auto &x:sol)cout << x.first << ' ' << x.second << endl;
     }
     else cout << "No Solution!" << endl;
 }

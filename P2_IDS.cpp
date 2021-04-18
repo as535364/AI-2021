@@ -18,7 +18,11 @@ std::tuple<bool, bool, int> dfsLimit(Node init, const string &s, int n, int m,
 	std::fill(vis.begin(), vis.end(), 0), std::fill(parent.begin(), parent.end(), 0);
 	init.setDepth(depthLimit);
     std::stack<Node> st;
-    if (init.canMove(0, 0, s))st.push(init);
+    if (init.canMove(0, 0, s)){
+        st.push(init);
+        vis[init.getPos().first * m + init.getPos().second] = 1;
+    }
+    
 
     while (!st.empty()){
         Node now = st.top();
@@ -102,7 +106,7 @@ int main(int argc, char *argv[]){
         }
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
-        for (auto &x : sol)cout << x.first << ' ' << x.second << ", ";
+        for (const auto &x : sol)cout << x.first << ' ' << x.second << endl;
         cout << endl;
     }
     else cout << "No Solution!" << endl;

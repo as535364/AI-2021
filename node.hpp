@@ -32,7 +32,7 @@ public:
         return std::pair<int, int>(this->x_, this->y_);
     };
     bool operator<(const Node &rhs) const{
-        return g_ + h_ > rhs.g_ + h_;
+        return g_ + h_ > rhs.g_ + rhs.h_;
     };
     void move(int diffX, int diffY, const std::string &b){
         int diff = this->get(x_, y_, b) - this->get(x_ + diffX, y_ + diffY, b);
@@ -82,7 +82,7 @@ public:
             }
             avaerage_ /= (n_ * m_);
         }
-        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);
+        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);// + avaerage_);
     };
 private:
     double g_ = 0, h_ = 0; // h for IDA*
