@@ -9,6 +9,7 @@ const int WALL = '*';
 class Node{
 public:
     Node(int n, int m): n_(n), m_(m){};
+    Node(int n, int m, int x, int y): n_(n), m_(m), x_(x), y_(y){};
     int get(int x, int y, const std::string &b) const{
         char tmp = b[x * (m_ + 2) + y];
         return tmp == WALL ? -1 : tmp - '0';
@@ -56,12 +57,26 @@ public:
     std::vector<Node> next(const std::string &b, bool sort=false){
         std::vector<Node> res;
         int dir[][2] = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
-        for(int i = 0; i < 4; ++i){
-            int dirx = dir[i][0], diry = dir[i][1];
-            if(this->canMove(dirx, diry, b)){
+        for(auto & i : dir){
+            int dirX = i[0], dirY = i[1];
+            if(this->canMove(dirX, dirY, b)){
                 Node tmp(*this);
-                tmp.move(dirx, diry, b);
+                tmp.move(dirX, dirY, b);
                 res.push_back(tmp);
+            }
+        }
+        if(sort)std::sort(res.begin(), res.end());
+        return res;
+    };
+    std::vector<std::pair<int, Node>> nextWithCost(const std::string &b, bool sort=false){
+        std::vector<std::pair<int, Node>> res;
+        int dir[][2] = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+        for(auto & i : dir){
+            int dirX = i[0], dirY = i[1];
+            if(this->canMove(dirX, dirY, b)){
+                Node tmp(*this);
+                tmp.move(dirX, dirY, b);
+                res.emplace_back(std::make_pair(tmp.g_ - this->g_, tmp));
             }
         }
         if(sort)std::sort(res.begin(), res.end());
@@ -71,24 +86,24 @@ public:
         depth_ = depth;
     };
     void calH(const std::string &s){
-        if(avaerage_ == -1){
-            avaerage_ = 0;
+        if(average == -1){
+            average = 0;
             for(int i = 1; i <= n_; ++i){
                 for(int j = 1; j <= m_; ++j){
                     double now = this->get(i, j, s);
                     now *= now;
-                    avaerage_ += now;
+                    average += now;
                 }
             }
-            avaerage_ /= (n_ * m_);
+            average /= (n_ * m_);
         }
-        h_ = (n_ - x_) + (m_ - y_) * (10 + avaerage_);
+        h_ = (n_ - x_) + (m_ - y_) * (10 + average);
     };
 private:
     double g_ = 0, h_ = 0; // h for IDA*
-    double avaerage_ = -1;
+    double average = -1;
     int n_, m_;
     int x_ = 1, y_ = 1; // person pos
     int px_ = -1, py_ = -1; // parent pos
-    int depth_; // for IDFS
+    int depth_; // for Iterative Deepening Search
 };

@@ -75,7 +75,7 @@ std::tuple<bool, int> IDAstar(double cutOffLimit, Node init, const string &s, in
 
 int main(int argc, char *argv[]){
     if(argc != 2){
-        cerr << "Usage: ./UCS filepath" << endl;
+        cerr << "Usage: " << argv[0] << " filepath" << endl;
         return -1;
     }
     int n, m;

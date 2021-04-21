@@ -38,7 +38,8 @@ std::tuple<bool, bool, int> dfsLimit(Node init, const string &s, int n, int m,
             cutOff = true;
             continue;
         }
-		std::vector<Node> res = now.next(s, true);
+        std::vector<Node> res = now.next(s);
+
 		for (const Node &x : res){
 			pii pos = x.getPos();
 			pii pPos = x.getParentPos();
@@ -71,8 +72,8 @@ std::tuple<bool, int> IDFS(int cutOffLimit, Node init, const string &s, int n, i
 
 
 int main(int argc, char *argv[]){
-    if (argc != 2){
-        cerr << "Usage: ./UCS filepath" << endl;
+    if(argc != 2){
+        cerr << "Usage: " << argv[0] << " filepath" << endl;
         return -1;
     }
     int n, m;
@@ -96,7 +97,7 @@ int main(int argc, char *argv[]){
 
     if (ans){
 		cout << "Cost: " << cost << endl;
-        cout << "Sol for " << filename << ": " << endl;
+        cout << "Sol for " << filename << ":" << endl;
         std::vector<pii> sol;
         int nowX = n, nowY = m;
         while (nowX != 1 || nowY != 1)
@@ -109,7 +110,6 @@ int main(int argc, char *argv[]){
         sol.push_back(pii(1, 1));
         std::reverse(sol.begin(), sol.end());
         for (const auto &x : sol)cout << x.first << ' ' << x.second << endl;
-        cout << endl;
     }
     else cout << "No Solution!" << endl;
 }
